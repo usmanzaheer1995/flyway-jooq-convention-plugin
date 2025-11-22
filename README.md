@@ -119,7 +119,6 @@ To build the project (which triggers generation):
 1. **`setupDatabaseForJooq`**: Starts a PostgreSQL Docker container and runs the Flyway migrations found in `src/main/resources/db/migration`.
 2. **`generateJooq`**: Connects to the running container and generates Kotlin JOOQ code into `build/generated-src/jooq/main`.
 3. **`stopPostgresContainer`**: Stops and removes the Docker container.
-4. **Compilation**: The generated source directory is added to the `main` Kotlin source set, ensuring the generated code is available to your application logic.
 
 ## Dependencies Added
 
