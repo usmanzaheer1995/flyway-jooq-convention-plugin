@@ -1,0 +1,30 @@
+[versions]
+java = "21"
+kotlin = "2.2.21"
+jooq = "3.19.28"
+flyway = "11.17.1"
+testcontainers = "1.21.3"
+commonsCompress = "1.28.0"
+postgresql = "42.7.8"
+jooqPlugin = "9.0"
+jakartaXmlBind = "4.0.0"
+
+[libraries]
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+flyway-gradle-plugin = { module = "org.flywaydb:flyway-gradle-plugin", version.ref = "flyway" }
+flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
+jooq-gradle-plugin = { module = "nu.studer:gradle-jooq-plugin", version.ref = "jooqPlugin" }
+jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
+jooq-codegen = { module = "org.jooq:jooq-codegen", version.ref = "jooq" }
+jooq-meta = { module = "org.jooq:jooq-meta", version.ref = "jooq" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
+testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+commons-compress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+jakarta-xml-bind = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version.ref = "jakartaXmlBind" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
+jooq = { id = "nu.studer.jooq", version.ref = "jooqPlugin" }

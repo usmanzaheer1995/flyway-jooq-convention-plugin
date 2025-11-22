@@ -1,0 +1,106 @@
+plugins {
+    `kotlin-dsl`
+    `maven-publish`
+}
+
+group = "com.usmanzaheer1995"
+version = "1.0.0"
+
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
+}
+
+val generatePluginVersions by tasks.registering {
+    val outputDir = layout.buildDirectory.dir("generated/sources/kotlin-templates")
+    outputs.dir(outputDir)
+
+    // Define inputs so Gradle knows when to re-run (optional but good practice)
+    inputs.property("jooqVersion", pluginLibs.versions.jooq)
+    inputs.property("postgresVersion", pluginLibs.versions.postgresql)
+    inputs.property("testcontainersVersion", pluginLibs.versions.testcontainers)
+    inputs.property("flywayVersion", pluginLibs.versions.flyway)
+    inputs.property("jakartaVersion", pluginLibs.versions.jakartaXmlBind)
+
+    doLast {
+        val outputFile = outputDir.get().file("PluginVersions.kt").asFile
+        outputFile.parentFile.mkdirs()
+
+        outputFile.writeText(
+            """
+            package buildsrc.convention
+            
+            object PluginVersions {
+                const val JOOQ = "${pluginLibs.versions.jooq.get()}"
+                const val POSTGRES = "${pluginLibs.versions.postgresql.get()}"
+                const val TESTCONTAINERS = "${pluginLibs.versions.testcontainers.get()}"
+                const val FLYWAY = "${pluginLibs.versions.flyway.get()}"
+                const val JAKARTA_XML = "${pluginLibs.versions.jakartaXmlBind.get()}"
+            }
+            """.trimIndent(),
+        )
+    }
+}
+
+kotlin {
+    sourceSets.getByName("main").kotlin.srcDir(generatePluginVersions)
+    jvmToolchain(
+        pluginLibs.versions.java
+            .get()
+            .toInt(),
+    )
+}
+
+dependencies {
+    implementation(pluginLibs.kotlin.gradle.plugin)
+    implementation(pluginLibs.flyway.gradle.plugin)
+    implementation(pluginLibs.jooq.gradle.plugin)
+    implementation(pluginLibs.testcontainers.postgresql)
+
+    implementation(pluginLibs.flyway.core)
+    implementation(pluginLibs.flyway.database.postgresql)
+    implementation(pluginLibs.postgresql)
+
+    implementation(pluginLibs.jooq)
+    implementation(pluginLibs.jooq.codegen)
+    implementation(pluginLibs.jooq.meta)
+
+    // https://stackoverflow.com/a/78665419
+    implementation(pluginLibs.commons.compress)
+}
+
+gradlePlugin {
+    plugins {
+        create("flywayJooqConvention", fun PluginDeclaration.() {
+            id = "com.usmanzaheer1995.flyway-jooq-convention"
+            implementationClass = "Flyway_jooq_conventionPlugin"
+        })
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+
+            pom {
+                name.set("Flyway & JOOQ Convention Plugin")
+                description.set(
+                    "A framework agnostic convention plugin for generating JOOQ classes from flyway migrations for Kotlin based projects",
+                )
+                url.set("https://github.com/usmanzaheer1995/flyway-jooq-convention-plugin")
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/usmanzaheer1995/jooq-convention-plugin")
+            credentials {
+                username = project.findProperty("githubActor") as String? ?: System.getenv("GITHUB_ACTOR")
+                password = project.findProperty("githubToken") as String? ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
