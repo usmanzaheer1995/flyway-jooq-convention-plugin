@@ -96,7 +96,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/usmanzaheer1995/jooq-convention-plugin")
+            url = uri("https://maven.pkg.github.com/usmanzaheer1995/flyway-jooq-convention-plugin")
             credentials {
                 username = project.findProperty("githubActor") as String? ?: System.getenv("GITHUB_ACTOR")
                 password = project.findProperty("githubToken") as String? ?: System.getenv("GITHUB_TOKEN")
