@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.usmanzaheer1995"
-version = "1.0.0"
+version = "1.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -69,30 +69,7 @@ dependencies {
     implementation(pluginLibs.commons.compress)
 }
 
-gradlePlugin {
-    plugins {
-        create("flywayJooqConvention", fun PluginDeclaration.() {
-            id = "com.usmanzaheer1995.flyway-jooq-convention"
-            implementationClass = "Flyway_jooq_conventionPlugin"
-        })
-    }
-}
-
 publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
-
-            pom {
-                name.set("Flyway & JOOQ Convention Plugin")
-                description.set(
-                    "A framework agnostic convention plugin for generating JOOQ classes from flyway migrations for Kotlin based projects",
-                )
-                url.set("https://github.com/usmanzaheer1995/flyway-jooq-convention-plugin")
-            }
-        }
-    }
-
     repositories {
         maven {
             name = "GitHubPackages"

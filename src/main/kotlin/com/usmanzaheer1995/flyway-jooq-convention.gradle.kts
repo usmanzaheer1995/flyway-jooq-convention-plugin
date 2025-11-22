@@ -1,8 +1,14 @@
+package com.usmanzaheer1995
+
 import buildsrc.convention.PluginVersions
 import nu.studer.gradle.jooq.JooqConfig
+import nu.studer.gradle.jooq.JooqExtension
+import org.flywaydb.core.Flyway
 import org.gradle.api.tasks.testing.Test
+import org.gradle.kotlin.dsl.invoke
 import org.jooq.meta.jaxb.ForcedType
 import org.jooq.meta.jaxb.Logging
+import org.testcontainers.containers.PostgreSQLContainer
 
 plugins {
     kotlin("jvm")
@@ -36,7 +42,7 @@ open class JooqConventionsExtension {
 
 val jooqConventions = extensions.create<JooqConventionsExtension>("jooqConventions")
 
-var postgresContainer: org.testcontainers.containers.PostgreSQLContainer<Nothing>? = null
+var postgresContainer: PostgreSQLContainer<Nothing>? = null
 var containerJdbcUrl: String? = null
 var containerUsername: String? = null
 var containerPassword: String? = null
@@ -49,7 +55,7 @@ val setupDatabaseForJooq by tasks.registering {
     doFirst {
         println("Starting PostgreSQL container...")
         postgresContainer =
-            org.testcontainers.containers.PostgreSQLContainer<Nothing>("postgres:${jooqConventions.postgresVersion}").apply {
+            PostgreSQLContainer<Nothing>("postgres:${jooqConventions.postgresVersion}").apply {
                 withDatabaseName(jooqConventions.databaseName)
                 withUsername(jooqConventions.username)
                 withPassword(jooqConventions.password)
@@ -67,7 +73,7 @@ val setupDatabaseForJooq by tasks.registering {
 
         // Run Flyway migrations programmatically
         val flyway =
-            org.flywaydb.core.Flyway
+            Flyway
                 .configure()
                 .dataSource(containerJdbcUrl, containerUsername, containerPassword)
                 .locations("filesystem:${migrationsDir.absolutePath}")
@@ -171,7 +177,7 @@ afterEvaluate {
                 println("Configuring jOOQ to use container: $containerJdbcUrl")
 
                 // Access the jOOQ configuration and update it
-                val jooqExt = project.extensions.getByType(nu.studer.gradle.jooq.JooqExtension::class.java)
+                val jooqExt = project.extensions.getByType(JooqExtension::class.java)
                 jooqExt.configurations.getByName("main").jooqConfiguration.apply {
                     jdbc.url = containerJdbcUrl
                     jdbc.user = containerUsername
