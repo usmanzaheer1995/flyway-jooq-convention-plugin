@@ -5,3 +5,5 @@ dependencyResolutionManagement {
         }
     }
 }
+
+rootProject.name = "flyway-jooq-convention-plugin"

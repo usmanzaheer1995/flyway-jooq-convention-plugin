@@ -32,8 +32,8 @@ pluginManagement {
         maven {
             url = uri("https://maven.pkg.github.com/usmanzaheer1995/flyway-jooq-convention")
             credentials { 
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN") 
+                username = extra.properties["github.flyway-jooq-plugin.githubActor"] as String? ?: System.getenv("GITHUB_ACTOR")
+                password = extra.properties["github.flyway-jooq-plugin.githubToken"] as String? ?: System.getenv("GITHUB_TOKEN") 
             } 
         } 
     } 
