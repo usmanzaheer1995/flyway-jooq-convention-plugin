@@ -30,7 +30,7 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
         maven {
-            url = uri("[https://maven.pkg.github.com/usmanzaheer1995/jooq-convention-plugin](https://maven.pkg.github.com/usmanzaheer1995/jooq-convention-plugin)")
+            url = uri("https://maven.pkg.github.com/usmanzaheer1995/flyway-jooq-convention")
             credentials { 
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN") 
@@ -44,8 +44,8 @@ pluginManagement {
 
 Add the plugin to your `build.gradle.kts`:
 ```kotlin
-plugins { 
-    id("com.usmanzaheer1995.flyway-jooq-convention") version "1.0.0" 
+plugins {
+    id("com.usmanzaheer1995.flyway-jooq-convention") version "1.0.0-SNAPSHOT"
 }
 ```
 
