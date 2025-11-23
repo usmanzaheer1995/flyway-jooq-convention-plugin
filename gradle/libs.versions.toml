@@ -2,11 +2,11 @@
 java = "21"
 kotlin = "2.2.21"
 jooq = "3.19.28"
+jooqPlugin = "9.0"
 flyway = "11.17.1"
 testcontainers = "1.21.3"
 commonsCompress = "1.28.0"
 postgresql = "42.7.8"
-jooqPlugin = "9.0"
 jakartaXmlBind = "4.0.0"
 
 [libraries]

@@ -99,7 +99,7 @@ val stopPostgresContainer by tasks.registering {
 // Configure jOOQ code generation
 afterEvaluate {
     jooq {
-        version.set("3.19.28")
+        version.set(PluginVersions.JOOQ)
 
         configurations {
             create("main", fun JooqConfig.() {
