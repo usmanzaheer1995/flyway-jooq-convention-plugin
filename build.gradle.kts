@@ -1,6 +1,7 @@
 plugins {
     `kotlin-dsl`
     `maven-publish`
+    id("com.gradle.plugin-publish") version "2.0.0"
 }
 
 group = "com.usmanzaheer1995"
@@ -78,6 +79,22 @@ publishing {
                 username = extra.properties["github.flyway-jooq-plugin.githubActor"] as String? ?: System.getenv("GITHUB_ACTOR")
                 password = extra.properties["github.flyway-jooq-plugin.githubToken"] as String? ?: System.getenv("GITHUB_TOKEN")
             }
+        }
+    }
+}
+
+gradlePlugin {
+    website = "https://www.usmanzaheer.com"
+    vcsUrl = "https://github.com/usmanzaheer1995/flyway-jooq-convention-plugin"
+
+    plugins {
+        register("flyway-jooq-convention") {
+            id = "com.usmanzaheer1995.flyway-jooq-convention-plugin"
+            displayName = "Flyway & JOOQ Convention Plugin"
+            description =
+                "A framework-agnostic Gradle convention plugin for generating JOOQ classes from Flyway migrations for Kotlin-based projects."
+            tags = listOf("jooq", "flyway")
+            implementationClass = "com.usmanzaheer1995.FlywayJooqConventionPlugin"
         }
     }
 }
