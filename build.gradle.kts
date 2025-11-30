@@ -53,9 +53,9 @@ kotlin {
 }
 
 dependencies {
-    compileOnly(pluginLibs.kotlin.gradle.plugin)
-    compileOnly(pluginLibs.flyway.gradle.plugin)
-    compileOnly(pluginLibs.jooq.gradle.plugin)
+    implementation(pluginLibs.kotlin.gradle.plugin)
+    implementation(pluginLibs.flyway.gradle.plugin)
+    implementation(pluginLibs.jooq.gradle.plugin)
 
     implementation(pluginLibs.testcontainers.postgresql)
     implementation(pluginLibs.flyway.core)
