@@ -57,16 +57,16 @@ dependencies {
     compileOnly(pluginLibs.flyway.gradle.plugin)
     compileOnly(pluginLibs.jooq.gradle.plugin)
 
-    compileOnly(pluginLibs.testcontainers.postgresql)
-    compileOnly(pluginLibs.flyway.core)
-    compileOnly(pluginLibs.flyway.database.postgresql)
-    compileOnly(pluginLibs.postgresql)
-    compileOnly(pluginLibs.jooq)
-    compileOnly(pluginLibs.jooq.codegen)
-    compileOnly(pluginLibs.jooq.meta)
+    implementation(pluginLibs.testcontainers.postgresql)
+    implementation(pluginLibs.flyway.core)
+    implementation(pluginLibs.flyway.database.postgresql)
+    implementation(pluginLibs.postgresql)
+    implementation(pluginLibs.jooq)
+    implementation(pluginLibs.jooq.codegen)
+    implementation(pluginLibs.jooq.meta)
 
     // https://stackoverflow.com/a/78665419
-    compileOnly(pluginLibs.commons.compress)
+    implementation(pluginLibs.commons.compress)
 }
 
 publishing {
