@@ -26,7 +26,7 @@ This plugin simplifies the JOOQ code generation workflow by leveraging **Testcon
 Add the plugin to your `build.gradle.kts`:
 ```kotlin
 plugins {
-    id("io.github.usmanzaheer1995.flyway-jooq-convention-plugin") version "1.0.3"
+    id("io.github.usmanzaheer1995.flyway-jooq-convention-plugin") version "1.0.4"
 }
 ```
 
