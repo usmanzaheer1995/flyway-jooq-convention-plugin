@@ -83,12 +83,12 @@ publishing {
 }
 
 gradlePlugin {
-    website = "https://www.usmanzaheer.com"
+    website = "https://github.com/usmanzaheer1995/flyway-jooq-convention-plugin"
     vcsUrl = "https://github.com/usmanzaheer1995/flyway-jooq-convention-plugin"
 
     plugins {
         register("flyway-jooq-convention") {
-            id = "com.usmanzaheer1995.flyway-jooq-convention-plugin"
+            id = "io.github.usmanzaheer1995.flyway-jooq-convention-plugin"
             displayName = "Flyway & JOOQ Convention Plugin"
             description =
                 "A framework-agnostic Gradle convention plugin for generating JOOQ classes from Flyway migrations for Kotlin-based projects."

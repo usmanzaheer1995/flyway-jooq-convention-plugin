@@ -1,7 +1,6 @@
 package com.usmanzaheer1995
 
 import buildsrc.convention.PluginVersions
-import nu.studer.gradle.jooq.JooqConfig
 import nu.studer.gradle.jooq.JooqExtension
 import org.flywaydb.core.Flyway
 import org.gradle.api.Plugin
@@ -99,7 +98,7 @@ class FlywayJooqConventionPlugin : Plugin<Project> {
                     version.set(PluginVersions.JOOQ)
 
                     configurations {
-                        create<JooqConfig>("main") {
+                        create("main").apply {
                             generateSchemaSourceOnCompilation.set(false)
 
                             jooqConfiguration.apply {
@@ -170,7 +169,7 @@ class FlywayJooqConventionPlugin : Plugin<Project> {
                         if (containerJdbcUrl != null) {
                             println("Configuring jOOQ to use container: $containerJdbcUrl")
 
-                            val jooqExt = extensions.getByType(JooqExtension::class.java)
+                            val jooqExt = project.extensions.getByType(JooqExtension::class.java)
                             jooqExt.configurations.getByName("main").jooqConfiguration.apply {
                                 jdbc.url = containerJdbcUrl
                                 jdbc.user = containerUsername
