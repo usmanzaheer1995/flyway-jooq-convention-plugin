@@ -21,9 +21,18 @@ This plugin simplifies the JOOQ code generation workflow by leveraging **Testcon
 
 ## Installation
 
-### 1. Add the Repository
+### 1. First option
 
-Since this plugin is hosted on GitHub Packages (or a custom Maven repo based on your configuration), add the repository to your `settings.gradle.kts`:
+Add the plugin to your `build.gradle.kts`:
+```kotlin
+plugins {
+    id("io.github.usmanzaheer1995.flyway-jooq-convention-plugin") version "1.0.1"
+}
+```
+
+### 2. Second option
+
+Since this plugin is hosted on GitHub Packages (or a custom Maven repo based on your configuration), you can also install the plugin by adding the repository to your `settings.gradle.kts`:
 ```kotlin
 pluginManagement { 
     repositories { 
@@ -40,15 +49,7 @@ pluginManagement {
 }
 ```
 
-### 2. Apply the Plugin
-
-Add the plugin to your `build.gradle.kts`:
-```kotlin
-plugins {
-    id("io.github.usmanzaheer1995.flyway-jooq-convention") version "1.0.0"
-}
-```
-
+And then doing option one (Add the plugin to your `build.gradle.kts`).
 
 ## Configuration
 
@@ -124,8 +125,9 @@ To build the project (which triggers generation):
 
 By applying this plugin, the following dependencies are automatically added to your project:
 
-- `org.jooq:jooq`
-- `org.postgresql:postgresql`
-- `org.flywaydb:flyway-core`
-- `org.flywaydb:flyway-database-postgresql`
-- `org.testcontainers:postgresql` (Test configuration)
+- `org.jooq:jooq` (implementation)
+- `org.postgresql:postgresql` (implementation)
+- `org.flywaydb:flyway-core` (runtimeOnly)
+- `org.flywaydb:flyway-database-postgresql` (runtimeOnly)
+- `org.testcontainers:postgresql` (testImplementation)
+- `org.testcontainers:junit-jupiter` (testImplementation)
