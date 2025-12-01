@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.usmanzaheer1995"
-version = "1.0.1"
+version = "1.0.3"
 
 repositories {
     mavenCentral()
@@ -58,11 +58,11 @@ dependencies {
     implementation(pluginLibs.jooq.gradle.plugin)
     // https://stackoverflow.com/a/78665419
     implementation(pluginLibs.commons.compress)
+    implementation(pluginLibs.testcontainers.postgresql)
+    implementation(pluginLibs.flyway.core)
+    implementation(pluginLibs.flyway.database.postgresql)
+    implementation(pluginLibs.postgresql)
 
-    compileOnly(pluginLibs.testcontainers.postgresql)
-    compileOnly(pluginLibs.flyway.core)
-    compileOnly(pluginLibs.flyway.database.postgresql)
-    compileOnly(pluginLibs.postgresql)
     compileOnly(pluginLibs.jooq)
     compileOnly(pluginLibs.jooq.codegen)
     compileOnly(pluginLibs.jooq.meta)

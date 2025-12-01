@@ -127,7 +127,11 @@ By applying this plugin, the following dependencies are automatically added to y
 
 - `org.jooq:jooq` (implementation)
 - `org.postgresql:postgresql` (implementation)
-- `org.flywaydb:flyway-core` (runtimeOnly)
-- `org.flywaydb:flyway-database-postgresql` (runtimeOnly)
+- `org.flywaydb:flyway-core` (implementation)
+- `org.flywaydb:flyway-database-postgresql` (implementation)
 - `org.testcontainers:postgresql` (testImplementation)
 - `org.testcontainers:junit-jupiter` (testImplementation)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
