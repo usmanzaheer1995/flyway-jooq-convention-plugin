@@ -38,8 +38,8 @@ class FlywayJooqConventionPlugin : Plugin<Project> {
                 add("testImplementation", "org.testcontainers:postgresql:${PluginVersions.TESTCONTAINERS}")
                 add("testImplementation", "org.testcontainers:junit-jupiter:${PluginVersions.TESTCONTAINERS}")
 
-                add("runtimeOnly", "org.flywaydb:flyway-core:${PluginVersions.FLYWAY}")
-                add("runtimeOnly", "org.flywaydb:flyway-database-postgresql:${PluginVersions.FLYWAY}")
+                add("implementation", "org.flywaydb:flyway-core:${PluginVersions.FLYWAY}")
+                add("implementation", "org.flywaydb:flyway-database-postgresql:${PluginVersions.FLYWAY}")
             }
 
             val jooqConventions = extensions.create<JooqConventionsExtension>("jooqConventions")

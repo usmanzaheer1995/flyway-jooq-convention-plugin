@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.usmanzaheer1995"
-version = "1.0.3"
+version = "1.0.4"
 
 repositories {
     mavenCentral()
@@ -62,8 +62,8 @@ dependencies {
     implementation(pluginLibs.flyway.core)
     implementation(pluginLibs.flyway.database.postgresql)
     implementation(pluginLibs.postgresql)
+    implementation(pluginLibs.jooq)
 
-    compileOnly(pluginLibs.jooq)
     compileOnly(pluginLibs.jooq.codegen)
     compileOnly(pluginLibs.jooq.meta)
 }
