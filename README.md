@@ -45,7 +45,7 @@ pluginManagement {
 Add the plugin to your `build.gradle.kts`:
 ```kotlin
 plugins {
-    id("com.usmanzaheer1995.flyway-jooq-convention") version "1.0.0"
+    id("io.github.usmanzaheer1995.flyway-jooq-convention") version "1.0.0"
 }
 ```
 

@@ -4,7 +4,7 @@ plugins {
     id("com.gradle.plugin-publish") version "2.0.0"
 }
 
-group = "com.usmanzaheer1995"
+group = "io.github.usmanzaheer1995"
 version = "1.0.0"
 
 repositories {
@@ -93,7 +93,7 @@ gradlePlugin {
             description =
                 "A framework-agnostic Gradle convention plugin for generating JOOQ classes from Flyway migrations for Kotlin-based projects."
             tags = listOf("jooq", "flyway")
-            implementationClass = "com.usmanzaheer1995.FlywayJooqConventionPlugin"
+            implementationClass = "io.github.usmanzaheer1995.FlywayJooqConventionPlugin"
         }
     }
 }

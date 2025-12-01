@@ -1,4 +1,4 @@
-package com.usmanzaheer1995
+package io.github.usmanzaheer1995
 
 import buildsrc.convention.PluginVersions
 import nu.studer.gradle.jooq.JooqExtension
