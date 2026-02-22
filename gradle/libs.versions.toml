@@ -1,12 +1,12 @@
 [versions]
 java = "21"
-kotlin = "2.2.21"
-jooq = "3.19.28"
-jooqPlugin = "9.0"
-flyway = "11.17.1"
-testcontainers = "1.21.3"
+kotlin = "2.3.10"
+jooq = "3.20.11"
+jooqPlugin = "10.2"
+flyway = "12.0.2"
+testcontainers = "1.21.4"
 commonsCompress = "1.28.0"
-postgresql = "42.7.8"
+postgresql = "42.7.10"
 jakartaXmlBind = "4.0.0"
 
 [libraries]
