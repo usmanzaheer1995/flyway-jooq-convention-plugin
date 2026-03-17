@@ -25,6 +25,8 @@ class FlywayJooqConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.run {
             extensions.extraProperties["jooq.version"] = PluginVersions.JOOQ
+            extensions.extraProperties["flyway.version"] = PluginVersions.FLYWAY
+            extensions.extraProperties["testcontainers.version"] = PluginVersions.TESTCONTAINERS
 
             pluginManager.apply("org.jetbrains.kotlin.jvm")
             pluginManager.apply("org.flywaydb.flyway")
