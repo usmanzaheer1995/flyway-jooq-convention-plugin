@@ -31,6 +31,8 @@ class FlywayJooqConventionPlugin : Plugin<Project> {
             dependencies.apply {
                 add("implementation", "org.jooq:jooq:${PluginVersions.JOOQ}")
                 add("implementation", "org.postgresql:postgresql:${PluginVersions.POSTGRES}")
+                add("jooqGenerator", "org.jooq:jooq-meta:${PluginVersions.JOOQ}")
+                add("jooqGenerator", "org.jooq:jooq-codegen:${PluginVersions.JOOQ}")
 
                 add("jooqGenerator", "org.postgresql:postgresql:${PluginVersions.POSTGRES}")
                 add("jooqGenerator", "jakarta.xml.bind:jakarta.xml.bind-api:${PluginVersions.JAKARTA_XML}")
