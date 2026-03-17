@@ -41,9 +41,6 @@ class FlywayJooqConventionPlugin : Plugin<Project> {
                 add("jooqGenerator", "org.postgresql:postgresql:${PluginVersions.POSTGRES}")
                 add("jooqGenerator", "jakarta.xml.bind:jakarta.xml.bind-api:${PluginVersions.JAKARTA_XML}")
 
-                add("testImplementation", "org.testcontainers:postgresql:${PluginVersions.TESTCONTAINERS}")
-                add("testImplementation", "org.testcontainers:junit-jupiter:${PluginVersions.TESTCONTAINERS}")
-
                 add("implementation", "org.flywaydb:flyway-core:${PluginVersions.FLYWAY}")
                 add("implementation", "org.flywaydb:flyway-database-postgresql:${PluginVersions.FLYWAY}")
             }
