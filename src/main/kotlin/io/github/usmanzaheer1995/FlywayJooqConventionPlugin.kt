@@ -123,6 +123,9 @@ class FlywayJooqConventionPlugin : Plugin<Project> {
                                         inputSchema = jooqConventions.inputSchema
                                         excludes = jooqConventions.excludedTables
 
+                                        // Force jOOQ to respect NOT NULL constraints from DB metadata
+                                        isForceIntegerTypesOnZeroScaleDecimals = true
+
                                         forcedTypes.addAll(
                                             listOf(
                                                 ForcedType().apply {
@@ -148,6 +151,9 @@ class FlywayJooqConventionPlugin : Plugin<Project> {
                                         isKotlinNotNullPojoAttributes = true
                                         isKotlinNotNullRecordAttributes = true
                                         isKotlinNotNullInterfaceAttributes = true
+
+                                        nullableAnnotationType = "jakarta.annotation.Nullable"
+                                        nonnullAnnotationType = "jakarta.annotation.NonNull"
                                     }
 
                                     target.apply {
