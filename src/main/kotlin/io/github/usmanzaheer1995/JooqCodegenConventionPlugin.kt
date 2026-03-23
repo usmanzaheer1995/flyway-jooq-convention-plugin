@@ -2,7 +2,6 @@ package io.github.usmanzaheer1995
 
 import buildsrc.convention.PluginVersions
 import nu.studer.gradle.jooq.JooqExtension
-import org.flywaydb.core.Flyway
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
@@ -15,8 +14,10 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jooq.meta.jaxb.ForcedType
 import org.jooq.meta.jaxb.Logging
 import org.testcontainers.containers.PostgreSQLContainer
+import java.io.File
+import java.sql.DriverManager
 
-class FlywayJooqConventionPlugin : Plugin<Project> {
+class JooqCodegenConventionPlugin : Plugin<Project> {
     private var postgresContainer: PostgreSQLContainer<Nothing>? = null
     private var containerJdbcUrl: String? = null
     private var containerUsername: String? = null
@@ -25,11 +26,9 @@ class FlywayJooqConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.run {
             extensions.extraProperties["jooq.version"] = PluginVersions.JOOQ
-            extensions.extraProperties["flyway.version"] = PluginVersions.FLYWAY
             extensions.extraProperties["testcontainers.version"] = PluginVersions.TESTCONTAINERS
 
             pluginManager.apply("org.jetbrains.kotlin.jvm")
-            pluginManager.apply("org.flywaydb.flyway")
             pluginManager.apply("nu.studer.jooq")
 
             dependencies.apply {
@@ -40,9 +39,6 @@ class FlywayJooqConventionPlugin : Plugin<Project> {
 
                 add("jooqGenerator", "org.postgresql:postgresql:${PluginVersions.POSTGRES}")
                 add("jooqGenerator", "jakarta.xml.bind:jakarta.xml.bind-api:${PluginVersions.JAKARTA_XML}")
-
-                add("implementation", "org.flywaydb:flyway-core:${PluginVersions.FLYWAY}")
-                add("implementation", "org.flywaydb:flyway-database-postgresql:${PluginVersions.FLYWAY}")
             }
 
             val jooqConventions = extensions.create<JooqConventionsExtension>("jooqConventions")
@@ -50,9 +46,40 @@ class FlywayJooqConventionPlugin : Plugin<Project> {
             val setupDatabaseForJooq =
                 tasks.register("setupDatabaseForJooq") {
                     group = "jooq"
-                    description = "Starts PostgreSQL container and runs Flyway migrations for jOOQ generation"
+                    description = "Starts PostgreSQL container and runs SQL migrations for jOOQ generation"
 
                     doFirst {
+                        val rawMigrationsDir =
+                            jooqConventions.migrationsDir
+                                ?: error(
+                                    "jooqConventions.migrationsDir is required but was not set.\n" +
+                                        "Please configure it in your build.gradle.kts:\n\n" +
+                                        "    jooqConventions {\n" +
+                                        "        migrationsDir = \"src/main/resources/db/migration\"\n" +
+                                        "    }",
+                                )
+
+                        val migrationsDir = project.file(rawMigrationsDir)
+
+                        println("DEBUG migrationsDir: ${migrationsDir.absolutePath}")
+                        println("DEBUG exists: ${migrationsDir.exists()}")
+                        println("DEBUG isDirectory: ${migrationsDir.isDirectory}")
+                        println("DEBUG files: ${migrationsDir.listFiles()?.map { it.name }}")
+
+                        if (!migrationsDir.exists()) {
+                            error(
+                                "Migrations directory does not exist: ${migrationsDir.absolutePath}\n" +
+                                    "Make sure 'jooqConventions.migrationsDir' points to a valid directory.",
+                            )
+                        }
+
+                        if (!migrationsDir.isDirectory) {
+                            error(
+                                "Migrations path is not a directory: ${migrationsDir.absolutePath}\n" +
+                                    "Make sure 'jooqConventions.migrationsDir' points to a directory, not a file.",
+                            )
+                        }
+
                         println("Starting PostgreSQL container...")
                         postgresContainer =
                             PostgreSQLContainer<Nothing>("postgres:${jooqConventions.postgresVersion}").apply {
@@ -67,19 +94,14 @@ class FlywayJooqConventionPlugin : Plugin<Project> {
                         containerPassword = postgresContainer!!.password
 
                         println("PostgreSQL container started: $containerJdbcUrl")
-                        println("Running Flyway migrations...")
+                        println("Running SQL migrations from: ${migrationsDir.absolutePath}")
 
-                        val migrationsDir = file("src/main/resources/db/migration")
-
-                        val flyway =
-                            Flyway
-                                .configure()
-                                .dataSource(containerJdbcUrl, containerUsername, containerPassword)
-                                .locations("filesystem:${migrationsDir.absolutePath}")
-                                .load()
-
-                        val result = flyway.migrate()
-                        println("Flyway migrations completed: ${result.migrationsExecuted} migrations executed")
+                        runMigrations(
+                            migrationsDir = migrationsDir,
+                            jdbcUrl = containerJdbcUrl!!,
+                            username = containerUsername!!,
+                            password = containerPassword!!,
+                        )
                     }
                 }
 
@@ -121,7 +143,6 @@ class FlywayJooqConventionPlugin : Plugin<Project> {
                                     database.apply {
                                         name = "org.jooq.meta.postgres.PostgresDatabase"
                                         inputSchema = jooqConventions.inputSchema
-                                        excludes = jooqConventions.excludedTables
 
                                         // Force jOOQ to respect NOT NULL constraints from DB metadata
                                         isForceIntegerTypesOnZeroScaleDecimals = true
@@ -219,14 +240,66 @@ class FlywayJooqConventionPlugin : Plugin<Project> {
             }
         }
     }
+
+    private fun runMigrations(
+        migrationsDir: File,
+        jdbcUrl: String,
+        username: String,
+        password: String,
+    ) {
+        val sqlFiles =
+            migrationsDir
+                .listFiles { file -> file.isFile && file.extension.equals("sql", ignoreCase = true) }
+                .orEmpty()
+                .sortedBy { it.name }
+
+        if (sqlFiles.isEmpty()) {
+            println("No SQL migration files found in ${migrationsDir.absolutePath}, skipping migrations.")
+            return
+        }
+
+        println("Found ${sqlFiles.size} migration file(s) to apply.")
+
+        DriverManager.getConnection(jdbcUrl, username, password).use { connection ->
+            connection.autoCommit = false
+
+            sqlFiles.forEach { file ->
+                println("  Applying: ${file.name}")
+                try {
+                    // Split on semicolons to handle multi-statement files, filtering blank segments
+                    val statements =
+                        file
+                            .readText()
+                            .split(";")
+                            .map { it.trim() }
+                            .filter { it.isNotEmpty() }
+
+                    connection.createStatement().use { stmt ->
+                        statements.forEach { sql -> stmt.execute(sql) }
+                    }
+
+                    connection.commit()
+                    println("✓ ${file.name} applied successfully")
+                } catch (e: Exception) {
+                    connection.rollback()
+                    throw RuntimeException(
+                        "Migration failed on file '${file.name}': ${e.message}",
+                        e,
+                    )
+                }
+            }
+
+            println("All migrations applied successfully (${sqlFiles.size} file(s)).")
+        }
+    }
 }
 
 open class JooqConventionsExtension {
+    var migrationsDir: String? = null
     var databaseName: String = "testdb"
     var username: String = "test"
     var password: String = "test"
     var postgresVersion: String = "16-alpine"
     var inputSchema: String = "public"
     var targetPackage: String = "com.example.jooq.generated"
-    var excludedTables: String = "flyway_schema_history"
 }
