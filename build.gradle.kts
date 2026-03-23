@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.usmanzaheer1995"
-version = "1.1.3"
+version = "2.0.0"
 
 repositories {
     mavenCentral()
@@ -20,7 +20,6 @@ val generatePluginVersions by tasks.registering {
     inputs.property("jooqVersion", pluginLibs.versions.jooq)
     inputs.property("postgresVersion", pluginLibs.versions.postgresql)
     inputs.property("testcontainersVersion", pluginLibs.versions.testcontainers)
-    inputs.property("flywayVersion", pluginLibs.versions.flyway)
     inputs.property("jakartaVersion", pluginLibs.versions.jakartaXmlBind)
 
     doLast {
@@ -35,7 +34,6 @@ val generatePluginVersions by tasks.registering {
                 const val JOOQ = "${pluginLibs.versions.jooq.get()}"
                 const val POSTGRES = "${pluginLibs.versions.postgresql.get()}"
                 const val TESTCONTAINERS = "${pluginLibs.versions.testcontainers.get()}"
-                const val FLYWAY = "${pluginLibs.versions.flyway.get()}"
                 const val JAKARTA_XML = "${pluginLibs.versions.jakartaXmlBind.get()}"
             }
             """.trimIndent(),
@@ -54,44 +52,28 @@ kotlin {
 
 dependencies {
     implementation(pluginLibs.kotlin.gradle.plugin)
-    implementation(pluginLibs.flyway.gradle.plugin)
     implementation(pluginLibs.jooq.gradle.plugin)
     // https://stackoverflow.com/a/78665419
     implementation(pluginLibs.commons.compress)
     implementation(pluginLibs.testcontainers.postgresql)
-    implementation(pluginLibs.flyway.core)
-    implementation(pluginLibs.flyway.database.postgresql)
     implementation(pluginLibs.postgresql)
     implementation(pluginLibs.jooq)
     implementation(pluginLibs.jooq.codegen)
     implementation(pluginLibs.jooq.meta)
 }
 
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/usmanzaheer1995/flyway-jooq-convention-plugin")
-            credentials {
-                username = extra.properties["github.flyway-jooq-plugin.githubActor"] as String? ?: System.getenv("GITHUB_ACTOR")
-                password = extra.properties["github.flyway-jooq-plugin.githubToken"] as String? ?: System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
-}
-
 gradlePlugin {
-    website = "https://github.com/usmanzaheer1995/flyway-jooq-convention-plugin"
-    vcsUrl = "https://github.com/usmanzaheer1995/flyway-jooq-convention-plugin"
+    website = "https://github.com/usmanzaheer1995/jooq-codegen-convention-plugin"
+    vcsUrl = "https://github.com/usmanzaheer1995/jooq-codegen-convention-plugin"
 
     plugins {
-        register("flyway-jooq-convention") {
-            id = "io.github.usmanzaheer1995.flyway-jooq-convention-plugin"
-            displayName = "Flyway & JOOQ Convention Plugin"
+        register("jooq-codegen-convention") {
+            id = "io.github.usmanzaheer1995.jooq-codegen-convention-plugin"
+            displayName = "JOOQ Convention Plugin"
             description =
-                "A framework-agnostic Gradle convention plugin for generating JOOQ classes from Flyway migrations for Kotlin-based projects."
-            tags = listOf("jooq", "flyway")
-            implementationClass = "io.github.usmanzaheer1995.FlywayJooqConventionPlugin"
+                "A framework-agnostic Gradle convention plugin for generating JOOQ classes from SQL migrations for Kotlin-based projects."
+            tags = listOf("jooq", "testcontainers", "jakarta")
+            implementationClass = "io.github.usmanzaheer1995.JooqCodegenConventionPlugin"
         }
     }
 }

@@ -6,4 +6,4 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "flyway-jooq-convention-plugin"
+rootProject.name = "jooq-codegen-convention-plugin"

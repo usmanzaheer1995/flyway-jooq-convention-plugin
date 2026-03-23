@@ -3,7 +3,6 @@ java = "21"
 kotlin = "2.3.10"
 jooq = "3.20.11"
 jooqPlugin = "10.2"
-flyway = "12.0.2"
 testcontainers = "1.21.4"
 commonsCompress = "1.28.0"
 postgresql = "42.7.10"
@@ -11,9 +10,6 @@ jakartaXmlBind = "4.0.0"
 
 [libraries]
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-flyway-gradle-plugin = { module = "org.flywaydb:flyway-gradle-plugin", version.ref = "flyway" }
-flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
-flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
 jooq-gradle-plugin = { module = "nu.studer:gradle-jooq-plugin", version.ref = "jooqPlugin" }
 jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
 jooq-codegen = { module = "org.jooq:jooq-codegen", version.ref = "jooq" }
@@ -26,5 +22,4 @@ jakarta-xml-bind = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version.r
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
 jooq = { id = "nu.studer.jooq", version.ref = "jooqPlugin" }
