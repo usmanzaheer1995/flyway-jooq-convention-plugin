@@ -61,11 +61,6 @@ class JooqCodegenConventionPlugin : Plugin<Project> {
 
                         val migrationsDir = project.file(rawMigrationsDir)
 
-                        println("DEBUG migrationsDir: ${migrationsDir.absolutePath}")
-                        println("DEBUG exists: ${migrationsDir.exists()}")
-                        println("DEBUG isDirectory: ${migrationsDir.isDirectory}")
-                        println("DEBUG files: ${migrationsDir.listFiles()?.map { it.name }}")
-
                         if (!migrationsDir.exists()) {
                             error(
                                 "Migrations directory does not exist: ${migrationsDir.absolutePath}\n" +
